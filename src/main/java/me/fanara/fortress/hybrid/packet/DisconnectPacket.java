@@ -14,6 +14,7 @@ public class DisconnectPacket extends Packet {
 
     public DisconnectPacket(String message) {
         super((byte) 0x02);
+        this.message = message;
     }
 
     @Override

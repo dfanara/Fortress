@@ -18,6 +18,7 @@ public class Client {
     private String name = "unknown";
     private Long lastRead = System.currentTimeMillis();
     private ArrayList<Packet> outboundPackets = new ArrayList<>();
+    private double lastTemp = 0.0;
 
     public Client(Socket socket) {
         this.socket = socket;
@@ -71,5 +72,13 @@ public class Client {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public double getLastTemp() {
+        return lastTemp;
+    }
+
+    public void setLastTemp(double lastTemp) {
+        this.lastTemp = lastTemp;
     }
 }

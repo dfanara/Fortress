@@ -15,6 +15,8 @@ public class HandshakeResponsePacket extends Packet {
 
     public HandshakeResponsePacket(boolean accepted, String message) {
         super((byte) 0x01);
+        this.accepted = accepted;
+        this.message = message;
     }
 
     @Override

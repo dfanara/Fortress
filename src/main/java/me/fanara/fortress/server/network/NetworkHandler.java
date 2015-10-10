@@ -1,7 +1,9 @@
 package me.fanara.fortress.server.network;
 
 import me.fanara.fortress.hybrid.packet.HandshakePacket;
+import me.fanara.fortress.hybrid.packet.KeepAlivePacket;
 import me.fanara.fortress.hybrid.packet.Packet;
+import me.fanara.fortress.hybrid.packet.temp.TemperatureReportPacket;
 import me.fanara.fortress.server.Client;
 import me.fanara.fortress.server.FortressServer;
 import me.fanara.fortress.server.progs.Program;
@@ -38,7 +40,8 @@ public class NetworkHandler extends Thread {
 
                     if(client.pendingOutboundPackets()) {
                         for(Packet packet : client.getOutboundPackets()) {
-                            System.out.println("Sending packet " + packet.getClass().getSimpleName());
+                            if(!(packet instanceof TemperatureReportPacket))
+                                System.out.println("Sending packet " + packet.getClass().getSimpleName());
                             dos.writeByte(packet.getId());
                             packet.write(dos);
                         }
@@ -47,9 +50,12 @@ public class NetworkHandler extends Thread {
 
                     if(client.hasTimedout()) {
                         client.disconnect();
+                        toRemove.add(client);
+                        System.out.println("Removing client " + client.getName());
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
+                    toRemove.add(client);
                 }
             }
 
@@ -63,12 +69,12 @@ public class NetworkHandler extends Thread {
             }
 
             clients.addAll(toAdd);
+            toAdd.clear();
 
             for(Client c : toRemove) {
                 clients.remove(c);
             }
 
-            toAdd.clear();
             toRemove.clear();
             toBroadcast.clear();
             Thread.yield();
@@ -85,12 +91,24 @@ public class NetworkHandler extends Thread {
 
     public void readPacket(Client client, DataInputStream dis) throws IOException {
         byte packetId = dis.readByte();
-        System.out.println("Received packet ID " + packetId);
+        if(packetId != 0x03)
+            if(packetId != (byte) 0xA4)
+                System.out.println("Received packet ID " + packetId);
         switch (packetId) {
             case 0x00:
                 HandshakePacket handshakePacket = new HandshakePacket("");
                 handshakePacket.create(dis);
                 handshakePacket.handleServer(client);
+                break;
+            case 0x03:
+                KeepAlivePacket keepAlivePacket = new KeepAlivePacket();
+                keepAlivePacket.create(dis);
+                keepAlivePacket.handleServer(client);
+                break;
+            case (byte) 0xA4:
+                TemperatureReportPacket trp = new TemperatureReportPacket(0);
+                trp.create(dis);
+                trp.handleServer(client);
                 break;
             default:
                 for(Program program : server.programs) {
@@ -98,7 +116,6 @@ public class NetworkHandler extends Thread {
                         program.handlePacket(client, packetId, dis);
                     }
                 }
-
                 break;
         }
     }

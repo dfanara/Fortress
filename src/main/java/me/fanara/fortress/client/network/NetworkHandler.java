@@ -5,6 +5,7 @@ import me.fanara.fortress.hybrid.packet.HandshakeResponsePacket;
 import me.fanara.fortress.hybrid.packet.Packet;
 import me.fanara.fortress.hybrid.packet.fibonnaci.FibonacciRequestPacket;
 import me.fanara.fortress.hybrid.packet.primes.RequestPrimePacket;
+import me.fanara.fortress.hybrid.packet.temp.TemperatureReportPacket;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -72,6 +73,12 @@ public class NetworkHandler extends Thread {
                 packet = new FibonacciRequestPacket(0);
                 packet.create(dis);
                 packet.handle();
+                break;
+            case (byte) 0xA4:
+                packet = new TemperatureReportPacket(0);
+                packet.create(dis);
+                packet.handle();
+                break;
         }
     }
 

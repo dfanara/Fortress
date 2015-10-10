@@ -1,5 +1,6 @@
 package me.fanara.fortress.hybrid.packet;
 
+import me.fanara.fortress.hybrid.packet.temp.TemperatureReportPacket;
 import me.fanara.fortress.server.Client;
 
 import java.io.DataInputStream;
@@ -19,7 +20,7 @@ public class KeepAlivePacket extends Packet {
 
     @Override
     public void handleServer(Client client) {
-        //Disregard ping packets.
+        client.sendPacket(new TemperatureReportPacket(0));
     }
 
     @Override

@@ -28,6 +28,8 @@ public class HandshakePacket extends Packet {
     @Override
     public void handleServer(Client client) {
         System.out.println("Adding client named: " + name);
+        client.setName(name);
+        client.sendPacket(new HandshakeResponsePacket(true, ""));
         //TODO: Get client information and set display name. Respond with an accept / deny packet
     }
 
