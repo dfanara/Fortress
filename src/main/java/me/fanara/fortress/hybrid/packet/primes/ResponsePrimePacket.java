@@ -35,7 +35,6 @@ public class ResponsePrimePacket extends Packet {
 
     @Override
     public void write(DataOutputStream dos) throws IOException {
-        System.out.println(long1 + " " + prime1 + " " + long2 + " " + prime2);
         dos.writeLong(long1);
         IOUtil.writeBoolean(dos, prime1);
         dos.writeLong(long2);

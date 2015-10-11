@@ -1,5 +1,6 @@
 package me.fanara.fortress.server.network;
 
+import me.fanara.fortress.Main;
 import me.fanara.fortress.hybrid.packet.HandshakePacket;
 import me.fanara.fortress.hybrid.packet.KeepAlivePacket;
 import me.fanara.fortress.hybrid.packet.Packet;
@@ -40,7 +41,7 @@ public class NetworkHandler extends Thread {
 
                     if(client.pendingOutboundPackets()) {
                         for(Packet packet : client.getOutboundPackets()) {
-                            if(!(packet instanceof TemperatureReportPacket))
+                            if(!(packet instanceof TemperatureReportPacket) && Main.DEBUG)
                                 System.out.println("Sending packet " + packet.getClass().getSimpleName());
                             dos.writeByte(packet.getId());
                             packet.write(dos);
@@ -91,9 +92,8 @@ public class NetworkHandler extends Thread {
 
     public void readPacket(Client client, DataInputStream dis) throws IOException {
         byte packetId = dis.readByte();
-        if(packetId != 0x03)
-            if(packetId != (byte) 0xA4)
-                System.out.println("Received packet ID " + packetId);
+        if(packetId != 0x03 && packetId != (byte) 0xA4 && Main.DEBUG)
+            System.out.println("Received packet ID " + packetId);
         switch (packetId) {
             case 0x00:
                 HandshakePacket handshakePacket = new HandshakePacket("");

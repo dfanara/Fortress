@@ -9,13 +9,11 @@ public class IOUtil {
     public static void writeString(DataOutputStream dos, String string) throws IOException {
         dos.writeInt(string.length());
         dos.writeBytes(string);
-        System.out.println("Writing string of " + string.length() + " chars.");
         dos.flush();
     }
 
     public static String readString(DataInputStream dis) throws IOException {
         int length = dis.readInt();
-        System.out.println("Reading string of " + length + " chars.");
         byte[] inBytes = new byte[length];
         dis.read(inBytes, 0, length);
         return new String(inBytes);

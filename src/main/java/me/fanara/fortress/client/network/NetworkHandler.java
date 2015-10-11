@@ -42,7 +42,7 @@ public class NetworkHandler extends Thread {
 
             if(toSend.size() > 0) {
                 Packet packet = toSend.get(0);
-                System.out.println("Sending packet " + packet.getClass().getSimpleName());
+//                System.out.println("Sending packet " + packet.getClass().getSimpleName());
                 try {
                     dos.writeByte(packet.getId());
                     packet.write(dos);

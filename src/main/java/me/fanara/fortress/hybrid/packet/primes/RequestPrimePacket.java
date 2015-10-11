@@ -20,7 +20,6 @@ public class RequestPrimePacket extends Packet {
     @Override
     public void handle() {
         //Prime factor dat piece o' poo
-        System.out.println("Received no " + number);
         for(int i = 2; i < number; i++) {
             if(number % i == 0) {
                 //number / i R0;

@@ -36,7 +36,7 @@ public class PrimeFactorizationProgram extends Program {
         ResponsePrimePacket packet = new ResponsePrimePacket(0, false, 0, false);
         packet.create(dis);
         busyMap.put(client, false);
-        System.out.println("Handling prime response " + packet.getLong1() + " " + packet.isLong1Prime() + " " + packet.getLong2() + " " + packet.isLong2Prime());
+        System.out.println("Processing response factors " + packet.getLong1() + " " + packet.getLong2());
 
         if(packet.isLong1Prime()) {
             prime.add(packet.getLong1());

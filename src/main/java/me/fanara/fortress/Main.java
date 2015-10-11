@@ -5,6 +5,8 @@ import me.fanara.fortress.server.FortressServer;
 
 public class Main {
 
+    public static boolean DEBUG = false;
+
     public static void main(String[] args) {
         if(args.length > 0) {
             if(args[0].equalsIgnoreCase("server")) {
